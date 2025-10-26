@@ -24,7 +24,7 @@ public:
 	
 
 	UFUNCTION(BlueprintCallable,Category="Habilidades")
-	void mejoraDaga1(float porcentaje);
+	void mejoraDaga1(float Porcentaje);
 	
 protected:
 	// Called when the game starts or when spawned
