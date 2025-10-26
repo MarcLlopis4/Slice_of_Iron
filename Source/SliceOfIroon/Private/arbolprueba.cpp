@@ -29,45 +29,33 @@ void Aarbolprueba::Tick(float DeltaTime)
 void Aarbolprueba::mejoraDaga1(float Porcentaje)
 {
     float Factor = 1.0f + (Porcentaje / 100.0f);
-	 for (TFieldIterator<FProperty> Prop(partesdearma->GetClass()); Prop; ++Prop)
+   
+    if (FStructProperty* LigerasProp = FindFProperty<FStructProperty>(partesdearma->GetClass(), TEXT("Ligeras")))
     {
-        FProperty* LigerasProp = *Prop;
+        void* LigerasData = LigerasProp->ContainerPtrToValuePtr<void>(partesdearma);
 
-        if (FStructProperty* StructProp = CastField<FStructProperty>(LigerasProp))
+        if (FStructProperty* DagaProp = FindFProperty<FStructProperty>(LigerasProp->Struct, TEXT("Daga")))
         {
-            void* LigerasData = StructProp->ContainerPtrToValuePtr<void>(partesdearma);
-
-            // Buscamos dentro de Ligeras → Daga
-            for (TFieldIterator<FProperty> SubProp(StructProp->Struct); SubProp; ++SubProp)
+            void* DagaData = DagaProp->ContainerPtrToValuePtr<void>(LigerasData);
+            
+            for (TFieldIterator<FProperty> ParteProp(DagaProp->Struct); ParteProp; ++ParteProp)
             {
-                FProperty* DagaProp = *SubProp;
-
-                if (FStructProperty* DagaStruct = CastField<FStructProperty>(DagaProp))
+                if (FStructProperty* ParteStruct = CastField<FStructProperty>(*ParteProp))
                 {
-                    void* DagaData = DagaStruct->ContainerPtrToValuePtr<void>(LigerasData);
-
-                    // Dentro de Daga → buscamos Hoja y Empuñadura
-                    for (TFieldIterator<FProperty> SubSubProp(DagaStruct->Struct); SubSubProp; ++SubSubProp)
+                    FString ParteName = ParteStruct->GetName();
+                    if (ParteName == TEXT("Hoja") || ParteName == TEXT("Empuñadura"))
                     {
-                        FProperty* ParteProp = *SubSubProp;
+                        void* ParteData = ParteStruct->ContainerPtrToValuePtr<void>(DagaData);
                         
-
-                        if (FStructProperty* ParteStruct = CastField<FStructProperty>(ParteProp))
+                        for (TFieldIterator<FProperty> DamageProp(ParteStruct->Struct); DamageProp; ++DamageProp)
                         {
-                            void* ParteData = ParteStruct->ContainerPtrToValuePtr<void>(DagaData);
-
-                            // Dentro de cada parte (Hoja de daga1,2,3 o Empuñadura)
-                            for (TFieldIterator<FProperty> DamageProp(ParteStruct->Struct); DamageProp; ++DamageProp)
+                            if (FFloatProperty* FloatProp = CastField<FFloatProperty>(*DamageProp))
                             {
-                                if (FFloatProperty* FloatProp = CastField<FFloatProperty>(*DamageProp))
+                                if (FloatProp->GetName().Contains(TEXT("Damage")))
                                 {
-                                    // Solo sube los que tengan "Damage" en el nombre
-                                    if (FloatProp->GetName().Contains("Damage"))
-                                    {
-                                        float ValorActual = FloatProp->GetPropertyValue_InContainer(ParteData);
-                                        float NuevoValor = ValorActual * Factor;
-                                        FloatProp->SetPropertyValue_InContainer(ParteData, NuevoValor);
-                                    }
+                                    float ValorActual = FloatProp->GetPropertyValue_InContainer(ParteData);
+                                    float NuevoValor = ValorActual * Factor;
+                                    FloatProp->SetPropertyValue_InContainer(ParteData, NuevoValor);
                                 }
                             }
                         }
@@ -76,8 +64,4 @@ void Aarbolprueba::mejoraDaga1(float Porcentaje)
             }
         }
     }
-
 }
-
-
-
