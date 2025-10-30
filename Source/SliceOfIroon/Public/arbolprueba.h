@@ -25,7 +25,10 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="Habilidades")
 	void mejoraDaga1(float Porcentaje);
-	
+	UFUNCTION(BlueprintCallable,Category="Habilidades")
+	void mejoraEspada1(float PorcentajeEspada);
+	void mejoraStamina(float PorcentajeStamina);
+	void mejoraEspadona1(float PorcentajeEspadona);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
