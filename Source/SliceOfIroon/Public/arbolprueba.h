@@ -1,10 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "arbolprueba.generated.h"
+
 
 
 
@@ -27,8 +30,11 @@ public:
 	void mejoraDaga1(float Porcentaje);
 	UFUNCTION(BlueprintCallable,Category="Habilidades")
 	void mejoraEspada1(float PorcentajeEspada);
-	void mejoraStamina(float PorcentajeStamina);
+	UFUNCTION(BlueprintCallable, Category="Habilidades")
 	void mejoraEspadona1(float PorcentajeEspadona);
+	UFUNCTION(BlueprintCallable, Category="Habilidades")
+	void mejoraStamina1(float StaminaMejorada1);
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

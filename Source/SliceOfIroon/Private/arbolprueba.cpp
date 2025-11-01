@@ -104,7 +104,16 @@ void Aarbolprueba::mejoraEspadona1(float PorcentajeEspadona)
 }
 
 
-
+void Aarbolprueba::mejoraStamina1(float StaminaMejorada1)
+{
+    ACharacter* PlayerChar = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+    UActorComponent* StatusComp = PlayerChar->FindComponentByClass<UActorComponent>();
+    
+    if (FFloatProperty* MaxStaminaProp = FindFProperty<FFloatProperty>(StatusComp->GetClass(), TEXT("MaxStamina")))
+    {
+        MaxStaminaProp->SetPropertyValue_InContainer(StatusComp,StaminaMejorada1 );
+    }
+}
 void Aarbolprueba::mejoraDaga1(float Porcentaje)
 {
     float Factor = 1.0f + (Porcentaje / 100.0f);
