@@ -4,14 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
+
+#include "Components/ActorComponent.h"
 #include "arbolprueba.generated.h"
 
 
-
-
-UCLASS()
+UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 
 
 class SLICEOFIROON_API Aarbolprueba : public AActor
@@ -32,8 +30,9 @@ public:
 	void mejoraEspada1(float PorcentajeEspada);
 	UFUNCTION(BlueprintCallable, Category="Habilidades")
 	void mejoraEspadona1(float PorcentajeEspadona);
-	UFUNCTION(BlueprintCallable, Category="Habilidades")
-	void mejoraStamina1(float StaminaMejorada1);
+
+
+	virtual void Tick(float DeltaTime) override;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -41,6 +40,22 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	
 
+};
+UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+class SLICEOFIROON_API UStatusComponent : public UActorComponent
+
+{
+	GENERATED_BODY()
+
+public:
+	UStatusComponent();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float MaxStamina = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float CurrentStamina = 0;
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+	void mejoraStamina1(float StaminaMejorada1);
 };

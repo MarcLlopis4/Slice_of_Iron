@@ -2,7 +2,14 @@
 
 
 #include "arbolprueba.h"
+
+#include "Kismet/GameplayStatics.h"
 #include "UObject/UnrealType.h"
+
+
+
+
+
 
 // Sets default values
 Aarbolprueba::Aarbolprueba()
@@ -104,16 +111,9 @@ void Aarbolprueba::mejoraEspadona1(float PorcentajeEspadona)
 }
 
 
-void Aarbolprueba::mejoraStamina1(float StaminaMejorada1)
-{
-    ACharacter* PlayerChar = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-    UActorComponent* StatusComp = PlayerChar->FindComponentByClass<UActorComponent>();
-    
-    if (FFloatProperty* MaxStaminaProp = FindFProperty<FFloatProperty>(StatusComp->GetClass(), TEXT("MaxStamina")))
-    {
-        MaxStaminaProp->SetPropertyValue_InContainer(StatusComp,StaminaMejorada1 );
-    }
-}
+
+  
+
 void Aarbolprueba::mejoraDaga1(float Porcentaje)
 {
     float Factor = 1.0f + (Porcentaje / 100.0f);
@@ -153,3 +153,30 @@ void Aarbolprueba::mejoraDaga1(float Porcentaje)
         }
     }
   }
+UStatusComponent::UStatusComponent()
+{
+       
+    PrimaryComponentTick.bCanEverTick = false; 
+}
+void UStatusComponent::mejoraStamina1(float StaminaMejorada1)
+{
+    // Acceso directo a las variables de la instancia del componente.
+    this->MaxStamina += StaminaMejorada1;
+    
+    // Si la estamina estaba llena (ej: 100), esto la pone en el nuevo máximo (ej: 110).
+    if (this->CurrentStamina < this->MaxStamina)
+    {
+        this->CurrentStamina = this->MaxStamina;
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("Max Stamina aumentado. Nuevo valor: %f"), this->MaxStamina);
+    /*  ACharacter* PlayerChar = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+    UStatusComponent* StatusComponent = PlayerChar->FindComponentByClass<UActorComponent>();
+
+    StatusComponent->MaxStamina+=StaminaMejorada1;
+    
+    if (FFloatProperty* MaxStaminaProp = FindFProperty<FFloatProperty>(StatusComp->GetClass(), TEXT("MaxStamina")))
+    {
+        MaxStaminaProp->SetPropertyValue_InContainer(StatusComp,StaminaMejorada1 );
+    }*/
+}
