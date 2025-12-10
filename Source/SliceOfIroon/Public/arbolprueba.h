@@ -20,7 +20,7 @@ public:
 	// Sets default values for this actor's properties
 	Aarbolprueba();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Armas")
-	UObject* partesdearma;
+	UStruct* partesdearma;
 
 	
 
