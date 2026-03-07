@@ -45,6 +45,10 @@
 				"Linux",
 				"Mac"
 			]
+		},
+		{
+			"Name": "HDRIBackdrop",
+			"Enabled": true
 		}
 	]
 }
